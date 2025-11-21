@@ -8,7 +8,9 @@
 </head>
 
 <body>
-
+  <div>
+    <div class="date"></div>
+  </div>
 
   <div class="clock">
     <div class="clock-face">
@@ -33,6 +35,7 @@
       margin: 0;
       font-size: 2rem;
       display: flex;
+      flex-direction: column;
       flex: 1;
       min-height: 100vh;
       align-items: center;
@@ -76,7 +79,44 @@
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minitsHand = document.querySelector('.min-hand')
+    const hoursHand = document.querySelector('.hour-hand')
+    const dateText = document.querySelector('.date')
 
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360) + 90;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`
+
+      console.log(secondsDegrees)
+
+      const minits = now.getMinutes();
+      const minitsDegrees = ((minits / 60) * 360) + 90;
+      minitsHand.style.transform = `rotate(${minitsDegrees}deg)`
+
+      const hours = now.getHours();
+      const hoursDegrees = ((hours / 12) * 360) + 90;
+      hoursHand.style.transform = `rotate(${hoursDegrees}deg)`
+
+      if (secondsDegrees === 90) {
+        secondHand.style.transition = 'none'
+      }
+      if (minitsDegrees === 90) {
+        minitsHand.style.transition = 'none'
+      }
+      if (hoursDegrees === 90) {
+        hoursHand.style.transition = 'none'
+      }
+
+      const dateVal = now.getDate();
+      const yearVal = now.getFullYear();
+      const monthVal = now.getMonth()
+      dateText.innerHTML = dateVal + '/' + monthVal + '/' + yearVal
+    }
+
+    setInterval(setDate, 1000)
 
   </script>
 </body>
