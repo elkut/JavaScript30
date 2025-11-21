@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS + CSS Clock</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
+  <div>
+    <div class="date"></div>
+  </div>
 
-
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
     </div>
+  </div>
+
 
 
   <style>
@@ -30,6 +35,7 @@
       margin: 0;
       font-size: 2rem;
       display: flex;
+      flex-direction: column;
       flex: 1;
       min-height: 100vh;
       align-items: center;
@@ -44,17 +50,18 @@
       position: relative;
       padding: 2rem;
       box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
+        0 0 0 4px rgba(0, 0, 0, 0.1),
         inset 0 0 0 3px #EFEFEF,
         inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
+        0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .clock-face {
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateY(-3px);
+      /* account for the height of the clock hands */
     }
 
     .hand {
@@ -63,13 +70,55 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function:
+        cubic-bezier(0.1, 2.1, 0.58, 1);
     }
-
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minitsHand = document.querySelector('.min-hand')
+    const hoursHand = document.querySelector('.hour-hand')
+    const dateText = document.querySelector('.date')
 
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360) + 90;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`
+
+      console.log(secondsDegrees)
+
+      const minits = now.getMinutes();
+      const minitsDegrees = ((minits / 60) * 360) + 90;
+      minitsHand.style.transform = `rotate(${minitsDegrees}deg)`
+
+      const hours = now.getHours();
+      const hoursDegrees = ((hours / 12) * 360) + 90;
+      hoursHand.style.transform = `rotate(${hoursDegrees}deg)`
+
+      if (secondsDegrees === 90) {
+        secondHand.style.transition = 'none'
+      }
+      if (minitsDegrees === 90) {
+        minitsHand.style.transition = 'none'
+      }
+      if (hoursDegrees === 90) {
+        hoursHand.style.transition = 'none'
+      }
+
+      const dateVal = now.getDate();
+      const yearVal = now.getFullYear();
+      const monthVal = now.getMonth()
+      dateText.innerHTML = dateVal + '/' + monthVal + '/' + yearVal
+    }
+
+    setInterval(setDate, 1000)
 
   </script>
 </body>
+
 </html>
